@@ -7,27 +7,32 @@ import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BankTransactionAnalyzerSimple {
-    public static void main(String[] args) throws IOException {
-        /**
-         * What is the total profit and loss from a list of bank statements? Is it positive or negative?
-         */
-        final Path RESOURCES = Paths.get(args[0]);
-        final List<String> lines = Files.readAllLines(RESOURCES);
-        Double sum = 0.0;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        for (String line : lines) {
-            String[] lineArr = line.split(",");
-            LocalDate date = LocalDate.parse(lineArr[0],formatter);
-            if (date.getMonth() == Month.JANUARY) {
-                double value = Double.parseDouble(lineArr[1]);
-                sum += value;
 
+    public static void main(String[] args) throws IOException {
+        final Path RESOURCES = Paths.get(args[0]);
+
+    }
+
+    public static double calculateTotalAmount(final List<BankTransaction> bankTransactions)  {
+        Double sum = 0d;
+        for (BankTransaction bankTransaction: bankTransactions) {
+                sum += bankTransaction.getAmount();
+        }
+        return sum;
+    }
+
+    public static List<BankTransaction> selectInMonth(final List<BankTransaction> bankTransactions, final Month month) {
+        List<BankTransaction> ans = new ArrayList<>();
+        for (BankTransaction bankTransaction: bankTransactions) {
+            if (bankTransaction.getDate().getMonth() == month) {
+                ans.add(bankTransaction);
             }
         }
-        System.out.println("sum:" + sum);
+        return ans;
     }
 
 
