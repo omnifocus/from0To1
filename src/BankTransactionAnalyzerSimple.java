@@ -14,25 +14,17 @@ public class BankTransactionAnalyzerSimple {
 
     public static void main(String[] args) throws IOException {
         final Path RESOURCES = Paths.get(args[0]);
+        List<BankTransaction> bankTransactions = BankStatementCSVParser.parseCsv(Files.readAllLines(RESOURCES));
+        BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
+        collectSummary(bankStatementProcessor);
 
     }
 
-    public static double calculateTotalAmount(final List<BankTransaction> bankTransactions)  {
-        Double sum = 0d;
-        for (BankTransaction bankTransaction: bankTransactions) {
-                sum += bankTransaction.getAmount();
-        }
-        return sum;
-    }
-
-    public static List<BankTransaction> selectInMonth(final List<BankTransaction> bankTransactions, final Month month) {
-        List<BankTransaction> ans = new ArrayList<>();
-        for (BankTransaction bankTransaction: bankTransactions) {
-            if (bankTransaction.getDate().getMonth() == month) {
-                ans.add(bankTransaction);
-            }
-        }
-        return ans;
+    private static void collectSummary(BankStatementProcessor bankStatementProcessor) {
+        System.out.println("The total for all transaction is " + bankStatementProcessor.calculateTotalAmount());
+        System.out.println("The total for transactions in Jan is " + bankStatementProcessor.selectInMonth(Month.JANUARY));
+        System.out.println("The total for transactions in Feb is " + bankStatementProcessor.selectInMonth(Month.FEBRUARY));
+        System.out.println("The total salary received is" + bankStatementProcessor.calculateTotalForCatogory("Salary"));
     }
 
 
