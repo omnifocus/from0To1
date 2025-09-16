@@ -3,11 +3,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BankStatementCSVParser {
+public class BankStatementCSVParser implements BankStatementParser{
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    public static BankTransaction parseLine(String line) {
+    @Override
+    public BankTransaction parseLine(String line) {
         final String[] arr = line.split(",");
         final LocalDate date = LocalDate.parse(arr[0],dateTimeFormatter);
         final double amount = Double.parseDouble(arr[1]);
@@ -15,7 +16,8 @@ public class BankStatementCSVParser {
         return new BankTransaction(date,amount,desc);
     }
 
-    public static List<BankTransaction> parseCsv(final List<String> lines) {
+    @Override
+    public List<BankTransaction> parseLines(final List<String> lines) {
        final List<BankTransaction> list = new ArrayList<>();
         for (final String line: lines) {
             list.add(parseLine(line));
