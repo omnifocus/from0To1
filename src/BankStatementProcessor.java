@@ -57,4 +57,12 @@ public class BankStatementProcessor {
         return res;
     }
 
+    public List<BankTransaction> findTransactions(final BankTransactionFilter filter) {
+        final List<BankTransaction> res = new ArrayList<>();
+        for (BankTransaction transaction: bankTransactions) {
+            if (filter.test(transaction)) res.add(transaction);
+        }
+        return res;
+    }
+
 }
